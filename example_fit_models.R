@@ -51,3 +51,10 @@ Comparison_spectra <- demon_ModSel(BM = fit_spectra_ME$BM_spectra$bm_AIC,
                     nBands = 10, 
                     bandNames = fit_spectra_ME$BM_spectra$bandNames)
 Comparison_spectra
+
+##### Extract evidence ratio between models #####
+
+# This function estimate the evidence ratio between the tree models based on the AIC weights
+# The best model has NA value 
+
+evidence_spectra <- demon_Evidence(Comparison = Comparison_spectra)

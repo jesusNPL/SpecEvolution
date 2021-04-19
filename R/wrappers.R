@@ -269,3 +269,36 @@ demon_ModSel <- function(BM, OU, EB, nBands = 10, bandNames) {
   
 }
 
+# Function to calculate the Evidence ratio
+
+demon_Evidence <- function(Comparison) { 
+  if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = TRUE)} 
+  if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = TRUE)} 
+  
+  library(tidyr)
+  library(dplyr)
+  bands <- unique(Comparison$Band) 
+  
+  evis <- list()
+  
+  for(i in 1:length(bands)) { 
+    tmp <- Comparison %>% 
+      filter(Band == bands[i]) 
+    
+    wts <- tmp$w 
+    names(wts) <- tmp$Model
+    
+    MxWeight <- max(wts) 
+    evi <- data.frame(MxWeight/wts)
+    evi$Model <- c("BM", "OU", "EB") 
+    evi$Band <- bands[i] 
+    evi[evi == 1] <- NA
+    names(evi) <- c("ER", "Model", "Band")
+    evis[[i]] <- evi
+    
+  }
+  
+  evis <- do.call(rbind, evis)
+  return(evis)
+  
+}
