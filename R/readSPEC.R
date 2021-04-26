@@ -17,7 +17,7 @@ demon_readSPEC <- function(path, metadata, state, format) {
   
   # Read spectra data
   spec <- read_spectra(
-    path = ruta, 
+    path = path, 
     format = format, 
     recursive = TRUE, 
     exclude_if_matches = c("BAD", "WR"))
