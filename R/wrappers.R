@@ -20,6 +20,60 @@ demon_AGG <- function(spectra) {
   return(results)  
 }
 
+##### Check adequacy #####
+
+## This is a function that check the adequacy of traits (spectra) values in PCM.
+# If the data is adequate it don't differ from the null distribution.
+
+check_Adequacy <- function(tree, spectra, nBands = 100, nSim = 1000) {
+  
+  require(arbutus)
+  require(geiger)
+  
+  ## Inits
+  nBands = nBands
+  taxa <- spectra[, 1]
+  spectrum <- spectra[, 2:(nBands + 1)]
+  bandNames <- names(spectrum)[1:nBands]
+  
+  obs_tbl <- list()
+  p_vals <- list()
+  
+  for(i in 1:nBands) {
+    svMisc::progress(i, max.value = nBands)
+    
+    band <- setNames(spectrum[, i], taxa) 
+    
+    treeData <- treedata(tree, band, sort = TRUE, warnings = FALSE)
+    # This is annoying, tree and data should be in the same order
+    band_order <- band[match(tree$tip.label, names(band))]
+    
+    unity <- make_unit_tree(tree, data = band_order)
+    
+    ## calculate default test stats on observed data 
+    obs <- calculate_pic_stat(unity, stats = NULL)
+    #obs_tmp <- obs
+    #obs_tmp$Band <- bandNames[i]
+    obs_tbl[[i]] <- obs
+    ## simulate data on unit.tree
+    sim.dat <- simulate_char_unit(unity, nsim = nSim)
+    ## calculate default test stats on simulated data
+    sims <- calculate_pic_stat(sim.dat, stats = NULL)
+    ## compare simulated to observed test statistics
+    res <- compare_pic_stat(obs, sims)
+    p_vals[[i]] <- res$p.values
+  }
+  
+  obs_tbl <- do.call(rbind, obs_tbl)
+  obs_tbl$Band <- bandNames
+  p_vals <- data.frame(do.call(rbind, p_vals))
+  p_vals$Band <- bandNames
+  
+  results <- list(adequacy = obs_tbl, pVals = p_vals)
+  
+  return(results)
+}
+
 # Wrapper to fit different evolutionary models
 
 demon_Evol <- function(spectra, tree, nBands = 10, NC) {
