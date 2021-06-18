@@ -1,4 +1,4 @@
-# This packages are not necessary
+# These packages are not necessary
 devtools::install_github("pecanproject/pecan", ref = "develop", 
                          subdir = "modules/data.land") # check
 devtools::install_github("pecanproject/pecan", ref = "develop", 
