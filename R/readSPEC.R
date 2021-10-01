@@ -1,9 +1,9 @@
 
 
 demon_readSPEC <- function(path, metadata, state, format) { 
-  if ( ! ("spectrolab" %in% installed.packages())) {install.packages("spectrolab", dependencies = T)} 
-  if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = T)}
-  if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = T)}
+  #if ( ! ("spectrolab" %in% installed.packages())) {install.packages("spectrolab", dependencies = T)} 
+  if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = TRUE)}
+  if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = TRUE)}
   
   # Load required packages
   require(spectrolab)
@@ -19,7 +19,7 @@ demon_readSPEC <- function(path, metadata, state, format) {
   spec <- read_spectra(
     path = path, 
     format = format, 
-    recursive = TRUE, 
+    #recursive = TRUE, 
     exclude_if_matches = c("BAD", "WR"))
   
   # Transform spectra to dataframe
