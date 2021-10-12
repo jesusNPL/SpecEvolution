@@ -1,6 +1,6 @@
 
 
-demon_readSPEC <- function(path, metadata, state, format) { 
+demon_read_by_state <- function(path, metadata, state, format) { 
   if ( ! ("spectrolab" %in% installed.packages())) {install.packages("spectrolab", dependencies = T)} 
   if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = T)}
   if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = T)}
@@ -13,13 +13,14 @@ demon_readSPEC <- function(path, metadata, state, format) {
   # Filter information form the metadata to be joined with the spectra data
   meta_state <- metadata %>% 
     filter(COUNTRY_STATE_CODE == state) %>% 
-    select(SPECIES, DATE, YEAR, LEAF.SPEC.ID, COUNTRY_STATE, SPCODE, fulcrum_id, LEAF_REPLICATE)
+    select(SPECIES, DATE, YEAR, LEAF.SPEC.ID, 
+           COUNTRY_STATE, SPCODE, fulcrum_id, LEAF_REPLICATE)
   
   # Read spectra data
   spec <- read_spectra(
     path = path, 
     format = format, 
-    recursive = TRUE, 
+    #recursive = TRUE, 
     exclude_if_matches = c("BAD", "WR"))
   
   # Transform spectra to dataframe
@@ -37,11 +38,16 @@ demon_readSPEC <- function(path, metadata, state, format) {
 }
 
 #state <- "OH"
-#ruta = "*Ohio/" 
-#metaDT <- read.csv("2019.META.DATA/2019.SVC.DATA.LABELS.csv")
+#ruta = "/Users/jesusnpl/Dropbox/Oak.Project.SVC data/*Ohio/" 
+#metaDT <- read.csv("/Users/jesusnpl/Dropbox/Oak.Project.SVC data/2019.META.DATA/2019.SVC.DATA.LABELS.csv")
 
-#bbb <- demon_readSPEC(path = ruta, metadata = metaDT, state = state, format = "sig")
+bbb <- demon_read_by_state(path = ruta, 
+                           metadata = metaDT, 
+                           state = state, 
+                           format = "sig")
 
 #bbb[[1]]
 
 #bbb[[2]][1:10, 1:10]
+
+x <- bbb[[2]]
