@@ -1,9 +1,9 @@
 
+demon_readSPEC <- function(path, metadata, state, format) { 
+  #if ( ! ("spectrolab" %in% installed.packages())) {install.packages("spectrolab", dependencies = T)} 
+  if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = TRUE)}
+  if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = TRUE)}
 
-demon_read_by_state <- function(path, metadata, state, format) { 
-  if ( ! ("spectrolab" %in% installed.packages())) {install.packages("spectrolab", dependencies = T)} 
-  if ( ! ("dplyr" %in% installed.packages())) {install.packages("dplyr", dependencies = T)}
-  if ( ! ("tidyr" %in% installed.packages())) {install.packages("tidyr", dependencies = T)}
   
   # Load required packages
   require(spectrolab)
@@ -41,13 +41,13 @@ demon_read_by_state <- function(path, metadata, state, format) {
 #ruta = "/Users/jesusnpl/Dropbox/Oak.Project.SVC data/*Ohio/" 
 #metaDT <- read.csv("/Users/jesusnpl/Dropbox/Oak.Project.SVC data/2019.META.DATA/2019.SVC.DATA.LABELS.csv")
 
-bbb <- demon_read_by_state(path = ruta, 
-                           metadata = metaDT, 
-                           state = state, 
-                           format = "sig")
+#bbb <- demon_read_by_state(path = ruta, 
+ #                          metadata = metaDT, 
+  #                         state = state, 
+   #                        format = "sig")
 
 #bbb[[1]]
 
 #bbb[[2]][1:10, 1:10]
 
-x <- bbb[[2]]
+#x <- bbb[[2]]
