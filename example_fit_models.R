@@ -26,35 +26,69 @@ oak_spectra$Spec_SE[1:5, 1:5] # Standard error spectra
 # to the evolutionary model
 
 # This is assuming NO measurement error
-fit_spectra <- demon_Evol(spectra = oak_spectra$Spec_mean, # mean spectra data
-                          tree = oak_tree, # phylogenetic tree
-                          nBands = 10, # number of bands
-                          NC = 2) # number of cores
+fit_spectra <- demon_Evol(
+  spectra = oak_spectra$Spec_mean, # mean spectra data
+  tree = oak_tree, # phylogenetic tree
+  nBands = 10, # number of bands
+  NC = 2 # number of cores
+) 
+
 fit_spectra
 
 # This is assuming measurement error
-fit_spectra_ME <- demon_Evol_ME(spectra = oak_spectra$Spec_mean, # mean spectra data
-                                spec_ME = oak_spectra$Spec_SE, # SE spectra data
-                                tree = oak_tree, # phylogenetic tree
-                                nBands = 10, # number of bands
-                                NC = 2) # number of cores
+fit_spectra_ME <- demon_Evol_ME(
+  spectra = oak_spectra$Spec_mean, # mean spectra data
+  spec_ME = oak_spectra$Spec_SE, # SE spectra data
+  tree = oak_tree, # phylogenetic tree
+  nBands = 10, # number of bands
+  NC = 2 # number of cores
+) 
+
 fit_spectra_ME
 
-##### Compare the three evolutionary models using AIC ##### 
+##### Compare the three evolutionary models using AIC #####
 
 # This function returns a data.frame with the AIC weights for each evolutionary model
 # that can be used to estimate the model evidence ratio
 
-Comparison_spectra <- demon_ModSel(BM = fit_spectra_ME$BM_spectra$bm_AIC, 
-                    OU = fit_spectra_ME$OU_spectra$ou_AIC, 
-                    EB = fit_spectra_ME$EB_spectra$eb_AIC, 
-                    nBands = 10, 
-                    bandNames = fit_spectra_ME$BM_spectra$bandNames)
+Comparison_spectra <- demon_ModSel(
+  BM = fit_spectra_ME$BM_spectra$bm_AICc, # BM model
+  OU = fit_spectra_ME$OU_spectra$ou_AICc, # OU model
+  EB = fit_spectra_ME$EB_spectra$eb_AICc, # Early-burst model
+  nBands = 10, # number of bands
+  bandNames = fit_spectra_ME$BM_spectra$bandNames # Band names
+)
+
 Comparison_spectra
 
 ##### Extract evidence ratio between models #####
 
 # This function estimate the evidence ratio between the tree models based on the AIC weights
-# The best model has NA value 
+# The best model has NA value
 
 evidence_spectra <- demon_Evidence(Comparison = Comparison_spectra)
+
+evidence_spectra
+
+##### Run phylogenetic signal using Blomberg's K with and without measurement error #####
+
+# Assuming NO measurement error
+
+phyloSig <- demon_K(spectra = oak_spectra$Spec_mean, # mean spectra data
+                    tree = oak_tree, # phylogenetic tree
+                    nBands = 10, # number of bands
+                    nSIM = 1000 # number of simulations 
+) 
+
+phyloSig
+
+# Assuming measurement error
+
+phyloSig_ME <- demon_K_ME(spectra = oak_spectra$Spec_mean, # mean spectra data
+                          spec_ME = oak_spectra$Spec_SE, # SE spectra data
+                          tree = oak_tree, # phylogenetic tree
+                          nBands = 10, # number of bands
+                          nSIM = 1000 # number of simulations 
+) 
+
+phyloSig_ME
