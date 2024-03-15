@@ -447,7 +447,7 @@ demon_K_ME <- function(spectra, spec_ME, tree,
 }
 
 ### Assuming NO measurement error
-demon_K <- function(spectra, spec_ME, tree,
+demon_K <- function(spectra, tree,
                     nSIM = 1000, nBands = 10) {
   source("https://raw.githubusercontent.com/jesusNPL/PhyloSignal/master/demon_K_test.R")
 
